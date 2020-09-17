@@ -98,6 +98,6 @@ public class MysqlDb extends BaseDb {
 
     @Override
     public String getJdbcDriver() {
-        return "com.mysql.cj.jdbc.Driver";
+        return "com.mysql.jdbc.Driver";
     }
 }

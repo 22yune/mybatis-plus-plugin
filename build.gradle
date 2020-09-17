@@ -41,7 +41,7 @@ intellij {
 // https://www.jetbrains.com/intellij-repository/releases
 
 group 'com.baomidou.plugin.idea.mybatisPlus'
-version '1.4.2'
+version '1.5.1'
 
 //　src/main/java classpath 需要的仓库
 repositories {
@@ -55,7 +55,7 @@ dependencies {
     compile "org.springframework:spring-core:5.0.6.RELEASE"
     compile group: 'com.baomidou', name: 'mybatis-plus-generator', version: '3.2.0'
     compile group: 'org.freemarker', name: 'freemarker', version: '2.3.28'
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.46'
     compile group: 'cn.easyproject', name: 'ojdbc5', version: '11.2.0.4'
     compile group: 'commons-configuration', name: 'commons-configuration', version: '1.9'
 }
