@@ -18,12 +18,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 /**
- * @author yanglin
+ *
+ *
  */
 public class PlusInjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     @Override
-    protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
+    protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result) {
         if (!(element instanceof PsiField)) {
             return;
         }
@@ -50,10 +51,10 @@ public class PlusInjectionLineMarkerProvider extends RelatedItemLineMarkerProvid
         }
 
         NavigationGutterIconBuilder<PsiElement> builder =
-                NavigationGutterIconBuilder.create(Icons.SPRING_INJECTION_ICON)
-                        .setAlignment(GutterIconRenderer.Alignment.CENTER)
-                        .setTarget(psiClass)
-                        .setTooltipTitle("Data access object found - " + psiClass.getQualifiedName());
+            NavigationGutterIconBuilder.create(Icons.SPRING_INJECTION_ICON)
+                .setAlignment(GutterIconRenderer.Alignment.CENTER)
+                .setTarget(psiClass)
+                .setTooltipTitle("Data access object found - " + psiClass.getQualifiedName());
         result.add(builder.createLineMarkerInfo(field.getNameIdentifier()));
     }
 

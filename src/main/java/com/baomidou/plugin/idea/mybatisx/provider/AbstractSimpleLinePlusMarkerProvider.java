@@ -16,12 +16,15 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @author yanglin
+ *
+ *
  */
 public abstract class AbstractSimpleLinePlusMarkerProvider<F extends PsiElement, T> extends AbstractPlusMarkerProviderAdaptor {
 
+
     @Override
-    public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
+    public void collectSlowLineMarkers(@NotNull List<? extends PsiElement> elements, @NotNull Collection<? super LineMarkerInfo<?>> result) {
+        super.collectSlowLineMarkers(elements, result);
     }
 
     @SuppressWarnings("unchecked")
