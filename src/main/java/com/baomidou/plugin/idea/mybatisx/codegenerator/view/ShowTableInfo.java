@@ -15,7 +15,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,6 +121,7 @@ public class ShowTableInfo extends JFrame {
         // 设置滚动面板视口大小（超过该大小的行数据，需要拖动滚动条才能看到）
         tableInfo.setPreferredScrollableViewportSize(new Dimension(600, 300));
         tableInfo.setModel(tableModel);
+        ViewUtil.fitTableColumns(tableInfo);
         showColumn.addActionListener(e -> {
             int[] selectedRows = tableInfo.getSelectedRows();
             if (selectedRows.length <= 0) {

@@ -78,7 +78,13 @@ public class ShowColumnInfo extends JFrame {
 
         String[] columnNames = new String[]{"checked","field name", "property", "allow be empty", "field type", "reamrk", "columnKey", "extra"};
 //        Object[][] rowData = {{"1","2","3","4","5"}};
-        DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames);
+        DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames){
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                Object o = getValueAt(0, columnIndex);
+                return  o != null ? o.getClass() : super.getColumnClass(columnIndex);
+            }
+        };
 
         // 设置表格内容颜色
         tableColumn.setForeground(JBColor.BLACK);                   // 字体颜色
@@ -90,12 +96,13 @@ public class ShowColumnInfo extends JFrame {
         // 设置表头
         tableColumn.getTableHeader().setFont(new Font(null, Font.BOLD, 14));  // 设置表头名称字体样式
         tableColumn.getTableHeader().setForeground(JBColor.RED);                // 设置表头名称字体颜色
-        tableColumn.getTableHeader().setResizingAllowed(false);               // 设置不允许手动改变列宽
+        tableColumn.getTableHeader().setResizingAllowed(true);               // 设置不允许手动改变列宽
         tableColumn.getTableHeader().setReorderingAllowed(false);             // 设置不允许拖动重新排序各列
 
         // 设置滚动面板视口大小（超过该大小的行数据，需要拖动滚动条才能看到）
-        tableColumn.setPreferredScrollableViewportSize(new Dimension(300, 300));
+        tableColumn.setPreferredScrollableViewportSize(new Dimension(750, 300));
         tableColumn.setModel(tableModel);
+        ViewUtil.fitTableColumns(tableColumn);
 
     }
 
