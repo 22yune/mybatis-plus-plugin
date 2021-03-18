@@ -15,8 +15,12 @@ public class ShowColumnInfo extends JFrame {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTable tableColumn;
+    private JTextField fieldPrefixField;
+    private JLabel fieldPrefix;
+    private ShowTableInfo.FieldConfig fieldConfig;
 
-    public ShowColumnInfo(String tableName) {
+    public ShowColumnInfo(String tableName, ShowTableInfo.FieldConfig fieldConfig) {
+        this.fieldConfig = fieldConfig;
         setContentPane(contentPane);
         getRootPane().setDefaultButton(buttonOK);
 
@@ -59,7 +63,9 @@ public class ShowColumnInfo extends JFrame {
         for (int i = 0; i < columnInfoList.size(); i++) {
             //每行的列数
             ColumnInfo columnInfo = columnInfoList.get(i);
-            String[] tableInfoArr = {
+            Object[] tableInfoArr = {
+                true,
+                columnInfo.getColumnName(),
                 columnInfo.getColumnName(),
                 columnInfo.getIsNullable(),
                 columnInfo.getColumnType(),
@@ -70,7 +76,7 @@ public class ShowColumnInfo extends JFrame {
             rowData[i] = tableInfoArr;
         }
 
-        String[] columnNames = new String[]{"field name", "allow be empty", "field type", "reamrk", "columnKey", "extra"};
+        String[] columnNames = new String[]{"checked","field name", "property", "allow be empty", "field type", "reamrk", "columnKey", "extra"};
 //        Object[][] rowData = {{"1","2","3","4","5"}};
         DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames);
 
@@ -95,6 +101,12 @@ public class ShowColumnInfo extends JFrame {
 
     private void onOK() {
         // add your code here
+        for (int i = 0; i < tableColumn.getRowCount(); i ++) {
+            if((boolean)tableColumn.getValueAt(i, 0)) {
+                fieldConfig.put((String)tableColumn.getValueAt(i,1), (String)tableColumn.getValueAt(i,2));
+            }
+        }
+        fieldConfig.setFieldPrefix(fieldPrefixField.getText());
         dispose();
     }
 
@@ -104,7 +116,7 @@ public class ShowColumnInfo extends JFrame {
     }
 
     public static void main(String[] args) {
-        ShowColumnInfo dialog = new ShowColumnInfo("menu");
+        ShowColumnInfo dialog = new ShowColumnInfo("menu",null);
         dialog.pack();
         dialog.setVisible(true);
         dialog.setLocationRelativeTo(null);

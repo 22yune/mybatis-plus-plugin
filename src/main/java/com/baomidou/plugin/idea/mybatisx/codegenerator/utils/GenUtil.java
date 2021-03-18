@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableFill;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
@@ -85,10 +86,10 @@ public class GenUtil {
 
         columnInfo.setColumnComment("123");
         columnInfos.add(columnInfo);
-        GenUtil.generatorCode(tableName, genConfig);
+        GenUtil.generatorCode(tableName, genConfig,null,null);
     }
 
-    public static void generatorCode(String tableName, GenConfig genConfig) {
+    public static void generatorCode(String tableName, GenConfig genConfig,Map<String,String> fieldNameMap, String fieldPrefix) {
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
 
@@ -149,6 +150,21 @@ public class GenUtil {
                 map.put("camelTableName", underlineToCamel(tableName));
                 setMap(map);
             }
+
+            @Override
+            public Map<String, Object> prepareObjectMap(Map<String, Object> objectMap) {
+                if(fieldNameMap != null){
+                    TableInfo tableInfo = (TableInfo) objectMap.get("table");
+                    tableInfo.setFieldNames(null);
+                    Iterator<TableField> iterator = tableInfo.getFields().iterator();
+                    while (iterator.hasNext()){
+                        if(!fieldNameMap.containsKey(iterator.next().getName().toUpperCase())){
+                            iterator.remove();
+                        }
+                    }
+                }
+                return super.prepareObjectMap(objectMap);
+            }
         };
 
         // 如果模板引擎是 freemarker
@@ -206,6 +222,7 @@ public class GenUtil {
         strategy.setControllerMappingHyphenStyle(true);
         // 表前缀
         strategy.setTablePrefix(genConfig.getPrefix());
+        strategy.setFieldPrefix(fieldPrefix);
         // 是否使用自动填充
         if (genConfig.isFill()) {
             List<TableFill> tableFillList = new ArrayList<>();
@@ -215,6 +232,22 @@ public class GenUtil {
         }
         // 乐观锁
 //        strategy.setVersionFieldName("version_name");
+
+        strategy.setNameConvert(new INameConvert() {
+            @Override
+            public String entityNameConvert(TableInfo tableInfo) {
+                return  NamingStrategy.capitalFirst(processName(tableInfo.getName(), strategy.getNaming(), strategy.getTablePrefix()));
+            }
+
+            @Override
+            public String propertyNameConvert(TableField field) {
+                String name = field.getName();
+                if(fieldNameMap != null || fieldNameMap.containsKey(name.toUpperCase())){
+                    name = fieldNameMap.get(name.toUpperCase());
+                }
+                return processName(name, strategy.getNaming(),strategy.getFieldPrefix());
+            }
+        });
 
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new MyFreemarkerTemplateEngine(projectPath, genConfig));
@@ -249,4 +282,28 @@ public class GenUtil {
         return result.toString();
     }
 
+    // copy from   ConfigBuilder
+    private static String processName(String name, NamingStrategy strategy, String[] prefix) {
+        boolean removePrefix = false;
+        if (prefix != null && prefix.length != 0) {
+            removePrefix = true;
+        }
+        String propertyName;
+        if (removePrefix) {
+            if (strategy == NamingStrategy.underline_to_camel) {
+                // 删除前缀、下划线转驼峰
+                propertyName = NamingStrategy.removePrefixAndCamel(name, prefix);
+            } else {
+                // 删除前缀
+                propertyName = NamingStrategy.removePrefix(name, prefix);
+            }
+        } else if (strategy == NamingStrategy.underline_to_camel) {
+            // 下划线转驼峰
+            propertyName = NamingStrategy.underlineToCamel(name);
+        } else {
+            // 不处理
+            propertyName = name;
+        }
+        return propertyName;
+    }
 }

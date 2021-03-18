@@ -15,7 +15,11 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.baomidou.plugin.idea.mybatisx.codegenerator.utils.MybatisConst.GEN_CONFIG;
 import static com.baomidou.plugin.idea.mybatisx.codegenerator.utils.MybatisConst.IDTYPES;
@@ -53,6 +57,7 @@ public class ShowTableInfo extends JFrame {
     private JLabel tablePrefix;
     private JTextField tablePrefixTextField;
     private final String projectFilePath;
+    private Map<String,FieldConfig> tableFieldConfigMaps = new ConcurrentHashMap<>();
 
     public ShowTableInfo(String projectFilePath) {
         this.projectFilePath = projectFilePath;
@@ -126,7 +131,8 @@ public class ShowTableInfo extends JFrame {
             for (int selectedRow : selectedRows) {
 //                    TableInfo tableInfo = tableInfoList.get(selectedRow);
                 String tableName = (String) ShowTableInfo.this.tableInfo.getValueAt(selectedRow, 0);
-                ShowColumnInfo dialog = new ShowColumnInfo(tableName);
+
+                ShowColumnInfo dialog = new ShowColumnInfo(tableName,tableFieldConfigMaps.computeIfAbsent(tableName,n -> new FieldConfig()));
                 dialog.pack();
                 dialog.setVisible(true);
                 dialog.setLocationRelativeTo(null);
@@ -150,7 +156,9 @@ public class ShowTableInfo extends JFrame {
             }
             for (int selectedRow : selectedRows) {
                 String tableName = (String) ShowTableInfo.this.tableInfo.getValueAt(selectedRow, 0);
-                DoCodeGenerator(tableName, genConfig);
+                FieldConfig fieldConfig = tableFieldConfigMaps.get(tableName);
+                DoCodeGenerator(tableName, genConfig,fieldConfig.fieldNameMap.size() == 0 ? null : fieldConfig.fieldNameMap,fieldConfig.getFieldPrefix());
+                fieldConfig.clear();
             }
             VirtualFileManager.getInstance().syncRefresh();
 
@@ -172,11 +180,11 @@ public class ShowTableInfo extends JFrame {
         setMysqlFieldText();
     }
 
-    public void DoCodeGenerator(String tableName, GenConfig genConfig) {
+    public void DoCodeGenerator(String tableName, GenConfig genConfig, Map<String,String> fieldNameMap, String fieldPrefix) {
         // 获取数据库 读取数据库信息
         //  配置生成的位置
         //  修改ftl文件
-        GenUtil.generatorCode(tableName, genConfig);
+        GenUtil.generatorCode(tableName, genConfig,fieldNameMap, fieldPrefix);
     }
 
     private void setMysqlFieldText() {
@@ -270,6 +278,32 @@ public class ShowTableInfo extends JFrame {
 
     private void onCancel() {
         dispose();
+    }
+
+    static class FieldConfig {
+        private Map<String,String> fieldNameMap = new HashMap<>();
+        private String fieldPrefix;
+
+        public String getFieldPrefix() {
+            return fieldPrefix;
+        }
+
+        public void setFieldPrefix(String fieldPrefix) {
+            this.fieldPrefix = fieldPrefix;
+        }
+
+        public void clear() {
+            this.fieldPrefix = null;
+            fieldNameMap.clear();
+        }
+
+        public void put(String key, String value) {
+            fieldNameMap.put(key, value);
+        }
+
+        public Map<String, String> getFieldNameMap() {
+            return fieldNameMap;
+        }
     }
 
     public static void main(String[] args) {
