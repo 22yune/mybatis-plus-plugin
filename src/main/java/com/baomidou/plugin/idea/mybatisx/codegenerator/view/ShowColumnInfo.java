@@ -5,6 +5,8 @@ import com.baomidou.plugin.idea.mybatisx.codegenerator.domain.vo.ColumnInfo;
 import com.intellij.ui.JBColor;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
@@ -17,6 +19,7 @@ public class ShowColumnInfo extends JFrame {
     private JTable tableColumn;
     private JTextField fieldPrefixField;
     private JLabel fieldPrefix;
+    private JCheckBox allSelect;
     private ShowTableInfo.FieldConfig fieldConfig;
 
     public ShowColumnInfo(String tableName, ShowTableInfo.FieldConfig fieldConfig) {
@@ -102,8 +105,18 @@ public class ShowColumnInfo extends JFrame {
         // 设置滚动面板视口大小（超过该大小的行数据，需要拖动滚动条才能看到）
         tableColumn.setPreferredScrollableViewportSize(new Dimension(750, 300));
         tableColumn.setModel(tableModel);
+        tableColumn.setAutoCreateRowSorter(true);
         ViewUtil.fitTableColumns(tableColumn);
 
+        allSelect.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                boolean s = allSelect.isSelected();
+                for (int i = 0; i < tableColumn.getRowCount(); i ++) {
+                    tableColumn.setValueAt(s, i,0);
+                }
+            }
+        });
     }
 
     private void onOK() {

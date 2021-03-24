@@ -158,11 +158,15 @@ public class GenUtil {
                     tableInfo.setFieldNames(null);
                     Iterator<TableField> iterator = tableInfo.getFields().iterator();
                     while (iterator.hasNext()){
-                        if(!fieldNameMap.containsKey(iterator.next().getName().toUpperCase())){
+                        TableField field = iterator.next();
+                        if(!fieldNameMap.containsKey(field.getName().toUpperCase())){
                             iterator.remove();
+                        }else {
+                            field.setConvert(true);
                         }
                     }
                 }
+
                 return super.prepareObjectMap(objectMap);
             }
         };
