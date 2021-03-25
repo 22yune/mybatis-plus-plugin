@@ -184,7 +184,7 @@ public class ShowTableInfo extends JFrame {
         // 获取数据库 读取数据库信息
         //  配置生成的位置
         //  修改ftl文件
-        GenUtil.generatorCode(tableName, genConfig,fieldNameMap, fieldPrefix);
+        GenUtil.generatorCode(tableName, genConfig, fieldNameMap, fieldPrefix);
     }
 
     private void setMysqlFieldText() {
