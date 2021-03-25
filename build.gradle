@@ -25,12 +25,10 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 // https://github.com/JetBrains/gradle-intellij-plugin/
-//
+// http://www.jetbrains.org/intellij/sdk/docs/tutorials/build_system/prerequisites.html
 intellij {
-    version '2020.2.2'
+    version '2020.2.3'
     type 'IU'
-    //localPath = 'C:\\Program Files\\JetBrains\\IntelliJ IDEA Community Edition 2020.3'
-    localPath = 'C:\\Program Files\\JetBrains\\IntelliJ IDEA 2020.2'
     //Bundled plugin dependencies 配置自带插件，lombok-plugin是手动复制进仓储中的\ideaIU-2019.1.2\plugins
     // 也可以删除'lombok-plugin'
     plugins = ['java','Spring', 'SpringBoot'] // , 'lombok-plugin' , 'DatabaseTools'
