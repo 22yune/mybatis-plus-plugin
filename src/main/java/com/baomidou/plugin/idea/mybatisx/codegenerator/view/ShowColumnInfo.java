@@ -79,7 +79,7 @@ public class ShowColumnInfo extends JFrame {
             rowData[i] = tableInfoArr;
         }
 
-        String[] columnNames = new String[]{"checked","field name", "property", "allow be empty", "field type", "reamrk", "columnKey", "extra"};
+        String[] columnNames = new String[]{"checked", "field name", "property", "allow be empty", "field type", "reamrk", "columnKey", "extra"};
 //        Object[][] rowData = {{"1","2","3","4","5"}};
         DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames){
             @Override
@@ -112,8 +112,8 @@ public class ShowColumnInfo extends JFrame {
             @Override
             public void stateChanged(ChangeEvent e) {
                 boolean s = allSelect.isSelected();
-                for (int i = 0; i < tableColumn.getRowCount(); i ++) {
-                    tableColumn.setValueAt(s, i,0);
+                for (int i = 0; i < tableColumn.getRowCount(); i++) {
+                    tableColumn.setValueAt(s, i, 0);
                 }
             }
         });
@@ -121,9 +121,9 @@ public class ShowColumnInfo extends JFrame {
 
     private void onOK() {
         // add your code here
-        for (int i = 0; i < tableColumn.getRowCount(); i ++) {
-            if((boolean)tableColumn.getValueAt(i, 0)) {
-                fieldConfig.put((String)tableColumn.getValueAt(i,1), (String)tableColumn.getValueAt(i,2));
+        for (int i = 0; i < tableColumn.getRowCount(); i++) {
+            if ((boolean) tableColumn.getValueAt(i, 0)) {
+                fieldConfig.put((String) tableColumn.getValueAt(i, 1), (String) tableColumn.getValueAt(i, 2));
             }
         }
         fieldConfig.setFieldPrefix(fieldPrefixField.getText());
@@ -136,7 +136,7 @@ public class ShowColumnInfo extends JFrame {
     }
 
     public static void main(String[] args) {
-        ShowColumnInfo dialog = new ShowColumnInfo("menu",null);
+        ShowColumnInfo dialog = new ShowColumnInfo("menu", null);
         dialog.pack();
         dialog.setVisible(true);
         dialog.setLocationRelativeTo(null);
