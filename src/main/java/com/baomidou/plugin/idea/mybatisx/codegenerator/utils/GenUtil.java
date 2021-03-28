@@ -246,7 +246,7 @@ public class GenUtil {
             @Override
             public String propertyNameConvert(TableField field) {
                 String name = field.getName();
-                if (fieldNameMap != null || fieldNameMap.containsKey(name.toUpperCase())){
+                if (fieldNameMap != null && fieldNameMap.containsKey(name.toUpperCase())){
                     name = fieldNameMap.get(name.toUpperCase());
                 }
                 return processName(name, strategy.getNaming(), strategy.getFieldPrefix());

@@ -123,7 +123,7 @@ public class ShowColumnInfo extends JFrame {
         // add your code here
         for (int i = 0; i < tableColumn.getRowCount(); i++) {
             if ((boolean) tableColumn.getValueAt(i, 0)) {
-                fieldConfig.put((String) tableColumn.getValueAt(i, 1), (String) tableColumn.getValueAt(i, 2));
+                fieldConfig.put(((String) tableColumn.getValueAt(i, 1)).toUpperCase(), (String) tableColumn.getValueAt(i, 2));
             }
         }
         fieldConfig.setFieldPrefix(fieldPrefixField.getText());

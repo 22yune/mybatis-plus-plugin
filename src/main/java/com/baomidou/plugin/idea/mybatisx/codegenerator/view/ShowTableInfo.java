@@ -157,7 +157,7 @@ public class ShowTableInfo extends JFrame {
             for (int selectedRow : selectedRows) {
                 String tableName = (String) ShowTableInfo.this.tableInfo.getValueAt(selectedRow, 0);
                 FieldConfig fieldConfig = tableFieldConfigMaps.get(tableName);
-                DoCodeGenerator(tableName, genConfig, fieldConfig.fieldNameMap.size() == 0 ? null : fieldConfig.fieldNameMap, fieldConfig.getFieldPrefix());
+                DoCodeGenerator(tableName, genConfig, (fieldConfig == null || fieldConfig.fieldNameMap.size() == 0) ? null : fieldConfig.fieldNameMap, fieldConfig.getFieldPrefix());
                 fieldConfig.clear();
             }
             VirtualFileManager.getInstance().syncRefresh();
